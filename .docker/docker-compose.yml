@@ -90,3 +90,26 @@ services:
             - logs:${APP_LOG_PATH_CONTAINER}
         ports:
             - "${WORKSPACE_SSH_PORT_HOST}:22"
+
+    php-worker:
+        image: ${COMPOSE_PROJECT_NAME}/php-worker
+        build:
+            context: .
+            dockerfile: ./php-worker/Dockerfile
+            args:
+                - APP_CACHE_PATH=${APP_CACHE_PATH_CONTAINER}
+                - APP_CODE_PATH=${APP_CODE_PATH_CONTAINER}
+                - APP_GROUP=${APP_GROUP}
+                - APP_GROUP_ID=${APP_GROUP_ID}
+                - APP_LOG_PATH=${APP_LOG_PATH_CONTAINER}
+                - APP_USER=${APP_USER}
+                - APP_USER_ID=${APP_USER_ID}
+                - PHP_WORKER_COMMAND_ARGS=${PHP_WORKER_COMMAND_ARGS}
+                - PHP_WORKER_PROCESS_NUMBER=${PHP_WORKER_PROCESS_NUMBER}
+                - TARGET_PHP_VERSION=${PHP_VERSION}
+                - TZ=${TIMEZONE}
+        volumes:
+            - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+            - ${APP_KEY_PATH_HOST}:${APP_KEY_PATH_CONTAINER}
+            - cache:${APP_CACHE_PATH_CONTAINER}
+            - logs:${APP_LOG_PATH_CONTAINER}
